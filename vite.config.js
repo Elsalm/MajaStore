@@ -12,7 +12,11 @@ export default defineConfig({
         tailwindcss(),
         vue(),
     ],
-    resolve:{
-        alias:
-    }
+    resolve: {
+        alias: {
+            "@": "/resources/js",
+            "@svg": "/resources/js/assets/svg",
+            vue: "vue/dist/vue.esm-bundler.js",
+        },
+    },
 });
