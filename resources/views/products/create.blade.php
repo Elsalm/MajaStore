@@ -1,7 +1,6 @@
 <x-layout>
     <x-slot:title>
-        Home
+        Crear Producto
     </x-slot>
-<home-body>
-</home-body>
+    <product-form / />
 </x-layout>
