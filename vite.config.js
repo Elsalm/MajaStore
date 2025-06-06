@@ -17,6 +17,8 @@ export default defineConfig({
             "@": "/resources/js",
             "@components": "/resources/js/components",
             "@svg": "/resources/js/assets/svg",
+            "@img": "/resources/js/assets/images",
+
             vue: "vue/dist/vue.esm-bundler.js",
         },
     },
