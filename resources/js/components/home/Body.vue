@@ -28,9 +28,11 @@
 
                 <button class="btn-primary p-4 rounded-lg">Ver Nuestros productos</button>
             </div>
-            <div class="w-full h-100 md:w-1/2 object-contain flex gap-4 *:rounded-lg justify-center">
-                <img src="https://placehold.co/3000x4000" alt="" class="self-start w-1/2 sm:w-2/5 h-9/10 rounded-lg">
-                <img src="https://placehold.co/3000x4000" alt="" class="self-end w-1/2 sm:w-2/5 h-9/10 rounded-lg">
+            <div class="w-full h-100 md:w-1/2 object-contain flex gap-4 justify-center group *:rounded-lg">
+                <img src="@img/sala_moderna.png" alt=""
+                    class="self-start w-1/2 sm:w-2/5 h-9/10 object-cover transition-all duration-300 ease-in-out rounded-lg group-hover:scale-90 hover:scale-110">
+                <img src="@img/dormitorio_moderno.png" alt=""
+                    class="self-end w-1/2 sm:w-2/5 h-9/10 object-cover transition-all duration-300 ease-in-out rounded-lg group-hover:scale-90 hover:scale-110">
             </div>
         </div>
     </main>

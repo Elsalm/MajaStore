@@ -7,4 +7,6 @@ Route::get('/', function () {
     return view('home.index');
 });
 
+Route::get('/featured/products', [ProductsController::class, 'featuredProducts']);
+
 Route::resource('products', ProductsController::class);

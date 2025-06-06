@@ -4,7 +4,8 @@ import axios from "axios";
 const form = reactive({
     name: "",
     description: "",
-    quantity: 0,
+    quantity: 1,
+    price: 1.00,
     images: [],
     categories: [],
 })
@@ -38,6 +39,7 @@ const onSubmitProduct = () => {
             <option v-for="category in categoryNames" :value="category.id">{{ category.name }}</option>
         </select>
         <input type="number" v-model="form.quantity" min="1">
+        <input type="number" v-model="form.quantity" step="0.01" min="1">
         <input type="file" multiple @change="onChangeFiles">
 
         <input type="submit" value="hoal">

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->Text('description');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->integer('quantity');
+            $table->decimal('price');
             $table->softDeletes();
             $table->timestamps();
         });
