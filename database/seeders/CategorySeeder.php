@@ -13,11 +13,11 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            ['name' => 'Sala'],
-            ['name' => 'Cuarto'],
-            ['name' => 'Comedor'],
-            ['name' => 'Oficina'],
-            ['name' => 'Almacenamiento'],
+            ['name' => 'Sofas'],
+            ['name' => 'Sillas'],
+            ['name' => 'Mesas'],
+            ['name' => 'Camas'],
+            ['name' => 'Almacenamiento y Armarios '],
         ];
 
         foreach ($categories as $category) {

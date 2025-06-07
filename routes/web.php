@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\ColorsController;
+use App\Http\Controllers\MaterialsController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
 
@@ -8,5 +11,8 @@ Route::get('/', function () {
 });
 
 Route::get('/featured/products', [ProductsController::class, 'featuredProducts']);
+Route::get('/colors', [ColorsController::class, 'index']);
+Route::get('/materials', [MaterialsController::class, 'index']);
+Route::get('/categories', [CategoriesController::class, 'index']);
 
 Route::resource('products', ProductsController::class);
