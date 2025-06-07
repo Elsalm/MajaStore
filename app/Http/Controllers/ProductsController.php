@@ -9,13 +9,7 @@ class ProductsController extends Controller
 {
     public function index()
     {
-        $product = Product::all();
-
-        if (! $product->count() == 0) {
-            return response()->json(['products' => $product], 200);
-        }
-
-        return response()->json(['products' => 'Todavia no hay productos'], 204);
+        return view('products.index');
     }
 
     public function create()
@@ -35,13 +29,19 @@ class ProductsController extends Controller
             'categories.*' => 'integer',
             'images' => 'required|array|min:1|max:10',
             'images.*' => 'image|between:10,157286400',
+            'colors' => 'required|array|min:1|max:5',
+            'colors.*' => 'integer',
+            'materials' => 'required|array|min:1|max:5',
+            'materials.*' => 'integer',
         ]);
 
         $product = Product::create(
             ['user_id' => 1, ...$request->except(['images', 'categories'])]
         );
 
-        $product->categories()->attach($request->categories);
+        $product->categories()->attach($request->input('categories'));
+        $product->colors()->attach($request->input('colors'));
+        $product->materials()->attach($request->input('materials'));
 
         foreach ($request->file('images') as $image) {
             $product->addMedia($image)->toMediaCollection('product');
@@ -88,5 +88,28 @@ class ProductsController extends Controller
         });
 
         return response()->json($products);
+    }
+
+    public function getProducts(Request $request)
+    {
+        $categories = $request->input('categories');
+        $colors = $request->input('colors');
+        $materials = $request->input('materials');
+
+        $query = Product::query();
+
+        if ($categories) {
+            $query->whereHas('categories', fn ($q) => $q->whereIn('name', $categories));
+        }
+
+        if ($colors) {
+            $query->whereIn('color', $colors); // si es columna en products
+        }
+
+        if ($materials) {
+            $query->whereIn('material', $materials); // igual
+        }
+
+        $results = $query->paginate(10);
     }
 }
