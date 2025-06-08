@@ -11,8 +11,10 @@ Route::get('/', function () {
 });
 
 Route::get('/featured/products', [ProductsController::class, 'featuredProducts']);
+Route::get('/products/all', [ProductsController::class, 'getProducts']);
+Route::post('/products/all', [ProductsController::class, 'getProducts']);
 Route::get('/colors', [ColorsController::class, 'index']);
 Route::get('/materials', [MaterialsController::class, 'index']);
 Route::get('/categories', [CategoriesController::class, 'index']);
 
-Route::resource('products', ProductsController::class);
+Route::resource('product', ProductsController::class);
