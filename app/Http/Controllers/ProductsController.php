@@ -12,6 +12,8 @@ class ProductsController extends Controller
         return view('products.index');
     }
 
+    public function show(Product $product) {}
+
     public function create()
     {
         return view('products.create');
@@ -98,18 +100,37 @@ class ProductsController extends Controller
 
         $query = Product::query();
 
-        if ($categories) {
-            $query->whereHas('categories', fn ($q) => $q->whereIn('name', $categories));
+        if (! empty($categories)) {
+            $query->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $categories));
         }
 
-        if ($colors) {
-            $query->whereIn('color', $colors); // si es columna en products
+        if (! empty($colors)) {
+            $query->whereHas('colors', fn ($q) => $q->whereIn('colors.id', $colors));
         }
 
-        if ($materials) {
-            $query->whereIn('material', $materials); // igual
+        if (! empty($materials)) {
+            $query->whereHas('materials', fn ($q) => $q->whereIn('materials.id', $materials));
+        }
+        if ($query->count() === 0) {
+            return response()->json(['success' => true, 'products' => 'no se han encontrado productos'], 404);
         }
 
         $results = $query->paginate(10);
+
+        $results->setCollection(
+            $results->getCollection()->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'price' => $product->price,
+                    'color' => $product->color,
+                    'material' => $product->material,
+                    'image_url' => $product->getFirstMediaUrl('product'),
+                    'categories' => $product->categories->pluck('name'),
+                ];
+            })
+        );
+
+        return response()->json(['success' => true, 'products' => $results]);
     }
 }

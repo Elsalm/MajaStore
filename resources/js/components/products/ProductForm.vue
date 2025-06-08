@@ -17,6 +17,16 @@ const formData = reactive({
     materials: [],
     colors: [],
 })
+const resetForm = () => {
+    form.name = ""
+    form.description = ""
+    form.quantity = 1
+    form.price = 1.00
+    form.images = []
+    form.categories = []
+    form.materials = []
+    form.colors = []
+}
 
 const onChangeFiles = (event) => {
     const size = Array.from(event.target.files).reduce((c, i) => c + i.size, 0);
@@ -29,11 +39,11 @@ const onChangeFiles = (event) => {
 
 
 const onSubmitProduct = () => {
-    axios.post(product, form, {
+    axios.post("/product", form, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
-    }).then(response => response.data).catch(error => console.log(error));
+    }).then(() => { resetForm() })
 }
 
 const getModel = async (url) => {
@@ -45,7 +55,6 @@ onMounted(async () => {
     formData.categories = await getModel("categories").then(data => data.category);
     formData.colors = await getModel("colors").then(data => data.colors);
     formData.materials = await getModel("materials").then(data => data.materials);
-    console.log(formData.categories);
 });
 </script>
 <template>
@@ -57,7 +66,7 @@ onMounted(async () => {
         </select>
         <div v-if="formData.colors">
             <label v-for="colors in formData.colors" :for="colors.name">
-                <input type="checkbox" :value="colors.id" :id="colors.name" class="peer hidden">
+                <input type="checkbox" :value="colors.id" :id="colors.name" v-model="form.colors" class="peer hidden">
                 <div :class="[`size-6 rounded-xl border border-gray-400 peer-checked:border-black`]"
                     :style="{ backgroundColor: colors.hexa }">
                 </div>
