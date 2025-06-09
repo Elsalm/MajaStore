@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot:title>
-        Muebles
+        {{ $data['name'] }}
     </x-slot>
-    <products-body />
+    <product :product='@json($data)'></product>
 </x-layout>

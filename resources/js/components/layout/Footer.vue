@@ -1,43 +1,87 @@
 <template>
-    <footer class="**:text-left text-neutral-50 bg-primary text-left container ">
-        <div class="pr-20 sm:pr-0 grid grid-cols-1 sm:grid-cols-2 gap-4 py-6">
-            <div class="flex! flex-col! gap-4!">
-                <h4 class="text-base! font-bold! text-neutral-50">
-                    MajaStore
-                </h4>
-                <p class="text-sm!">Muebles de calidad para cadad casa, construidos con cuidado y diseñados para el
-                    confort
-                </p>
-                <div class="*:fill-neutral-50 flex gap-2">
-                    <a href="">
-                        <twitterIcon class="size-4"></twitterIcon>
-                    </a>
-                    <a href="">
-                        <instagramIcon class="size-4"></instagramIcon>
-                    </a>
-                    <a href="">
-                        <facebookIcon class="size-4"></facebookIcon>
-                    </a>
+    <footer class="bg-primary text-white text-left">
+        <div class="container py-12">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">MajaStore</h3>
+                    <p class="text-sm text-neutral-200 mb-4">
+                        Muebles de calidad para cada casa, construidos con cuidado y diseñados para el confort.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-white hover:text-primary-lighter">
+                            <FacebookIcon class="size-5" />
+                        </a>
+                        <a href="#" class="text-white hover:text-primary-lighter">
+                            <InstagramIcon class="size-5" />
+                        </a>
+                        <a href="#" class="text-white hover:text-primary-lighter">
+                            <TwitterIcon class="size-5" />
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Enlaces Rápidos</h3>
+                    <ul class="space-y-2">
+                        <li v-for="item in data['Quick-Links']" :key="item">
+                            <a :href="'#' + item" class="text-sm text-neutral-200 hover:text-white transition">
+                                {{ item }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Customer Service -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Atención al Cliente</h3>
+                    <ul class="space-y-2">
+                        <li v-for="item in data['Customer-Service']" :key="item">
+                            <a :href="'#' + item" class="text-sm text-neutral-200 hover:text-white transition">
+                                {{ item }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Contact Us -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Contáctanos</h3>
+                    <ul class="space-y-3 text-sm text-neutral-200">
+                        <li class="flex items-start">
+                            <MapPinIcon class="size-5 mr-2 mt-1" />
+                            <span>123 Calle Diseño, Ciudad Muebles, 12345</span>
+                        </li>
+                        <li class="flex items-center">
+                            <PhoneIcon class="size-5 mr-2" />
+                            <span>+52 (555) 123-4567</span>
+                        </li>
+                        <li class="flex items-center">
+                            <MailIcon class="size-5 mr-2" />
+                            <span>contacto@majastore.com</span>
+                        </li>
+                        <li class="flex items-center">
+                            <ClockIcon class="size-5 mr-2" />
+                            <span>Lun-Vie: 9am-6pm, Sáb: 10am-2pm</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
-            <div v-for="(items, title) in data" :key="title" class="mb-4">
-                <h4 class="text-base! font-bold! mb-2">{{ title.replace(/-/g, ' ') }}</h4>
-                <div class="flex flex-col gap-2">
-                    <a v-for="item in items" :key="item" :href="'#' + item" class="text-sm!">
-                        {{ item.replace(/-/g, ' ') }}
-                    </a>
-                </div>
+            <!-- Footer Bottom -->
+            <div class="border-t border-primary-light mt-8 pt-6 text-center text-sm text-neutral-300">
+                <p>&copy; {{ new Date().getFullYear() }} MajaStore. Todos los derechos reservados.</p>
             </div>
-        </div>
-        <div class="border-t-1 border-primary-light py-1">
-            <p class="text-center!">&copy;MajaStore Todos los derechos reservados</p>
         </div>
     </footer>
 </template>
+
 <script setup>
-import twitterIcon from "@svg/twitter.vue"
-import instagramIcon from "@svg/instagram.vue"
-import facebookIcon from "@svg/facebook.vue"
-const data = { "Quick-Links": ["About Us", "Our Products", "Contact Us"], "Customer-Service": ["FAQ", "Shipping & Returns", "Warranty"], "Contact-Us": ["direccion", "ntelefono", "email"] }
+import { FacebookIcon, InstagramIcon, TwitterIcon, MapPinIcon, PhoneIcon, MailIcon, ClockIcon } from 'lucide-vue-next'
+
+const data = {
+    'Quick-Links': ['Sobre Nosotros', 'Nuestros Productos', 'Blog', 'Contáctanos'],
+    'Customer-Service': ['FAQ', 'Envíos y Devoluciones', 'Garantía', 'Cuidado del Producto'],
+}
 </script>

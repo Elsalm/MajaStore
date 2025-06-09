@@ -9,10 +9,30 @@ class ProductsController extends Controller
 {
     public function index()
     {
-        return view('products.index');
+        return view('products.filter');
     }
 
-    public function show(Product $product) {}
+    public function show(Product $product)
+    {
+        $product->load('categories');
+        $product->load('colors');
+        $product->load('materials');
+
+        $data = [
+            'id' => $product->id,
+            'name' => $product->name,
+            'price' => $product->price,
+            'color' => $product->colors,
+            'description' => $product->description,
+            'material' => $product->materials->pluck('name', 'id'),
+            'images' => $product->getMedia('product')->map(function ($img) {
+                return $img['original_url'];
+            }),
+            'categories' => $product->categories->pluck('name', 'id'),
+        ];
+
+        return view('products.index', compact('data'));
+    }
 
     public function create()
     {
@@ -82,14 +102,21 @@ class ProductsController extends Controller
     // solo para aclarar esto es temporal ya despues lo hare en base a las ventas 👌;
     public function featuredProducts()
     {
-        $products = Product::with('categories')->take(4)->get()->map(function ($product) {
-            return [
-                'product' => $product,
-                'media' => $product->getFirstMediaUrl('product'),
-            ];
-        });
+        $products = Product::with('categories')
+            ->take(4)
+            ->get()
+            ->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'price' => $product->price,
+                    'material' => $product->material,
+                    'image_url' => $product->getFirstMediaUrl('product'),
+                    'categories' => $product->categories->pluck('name'),
+                ];
+            });
 
-        return response()->json($products);
+        return response()->json(['success' => true, 'products' => $products]);
     }
 
     public function getProducts(Request $request)

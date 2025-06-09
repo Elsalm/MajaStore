@@ -1,3 +1,7 @@
-<div>
-    <!-- Be present above all else. - Naval Ravikant -->
-</div>
+<x-layout>
+    <x-slot:title>
+        Muebles
+    </x-slot>
+    <products-body>
+    </products-body>
+</x-layout>
