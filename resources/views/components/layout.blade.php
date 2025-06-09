@@ -11,11 +11,8 @@
 <body id="app">
     <header-component>
     </header-component>
-
     {{ $slot }}
-
     <footer-component>
-
     </footer-component>
 </body>
 

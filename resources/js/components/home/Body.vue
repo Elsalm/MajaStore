@@ -1,5 +1,4 @@
 <template>
-
     <main>
         <Introduction />
         <Categorias />
