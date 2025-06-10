@@ -40,4 +40,12 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Usuario Desautenticado'], 200);
     }
+
+    public function me()
+    {
+
+        $me = Auth::check();
+
+        return response()->json($me, 200);
+    }
 }

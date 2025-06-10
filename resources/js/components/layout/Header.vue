@@ -41,16 +41,28 @@
                     </button>
                     <div v-if="isUserMenuOpen"
                         class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                        <a href="/login" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            @click="closeUserMenu">
-                            <LogIn class="mr-2 size-4" />
-                            Iniciar sesión
-                        </a>
-                        <a href="/register" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            @click="closeUserMenu">
-                            <UserPlus class="mr-2 size-4" />
-                            Crear Cuenta
-                        </a>
+                        <div v-if="!me">
+                            <a href="/login" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                @click="closeUserMenu">
+                                <LogIn class="mr-2 size-4" />
+                                Iniciar sesión
+                            </a>
+                            <a href="/register"
+                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                @click="closeUserMenu">
+                                <UserPlus class="mr-2 size-4" />
+                                Crear Cuenta
+                            </a>
+
+                        </div>
+                        <div v-else>
+
+                            <button class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                @click="handleLogOut">
+                                <UserMinus class="mr-2 size-4" />
+                                Cerrar sesión
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -80,6 +92,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import axios from "axios"
 import {
     Search,
     ShoppingCart,
@@ -88,6 +101,7 @@ import {
     User,
     LogIn,
     UserPlus,
+    UserMinus
 } from 'lucide-vue-next'
 
 const isMenuOpen = ref(false)
@@ -96,6 +110,7 @@ const isSearchOpen = ref(false)
 const isUserMenuOpen = ref(false)
 const userMenuRef = ref(null)
 const cartArticles = ref([])
+const me = ref(false);
 const options = [
     { dir: '/categorias/sala/', categories: 'Sala' },
     { dir: '/categorias/cuarto/', categories: 'Cuarto' },
@@ -108,14 +123,28 @@ const toggleMenu = () => (isMenuOpen.value = !isMenuOpen.value)
 const redirectCart = () => (location.href = "/cart");
 const closeMenu = () => (isMenuOpen.value = false)
 const toggleSearch = () => (isSearchOpen.value = !isSearchOpen.value)
-const toggleUserMenu = () => (isUserMenuOpen.value = !isUserMenuOpen.value)
+const toggleUserMenu = () => { isUserMenuOpen.value = !isUserMenuOpen.value; getMe().then(data => me.value = data) }
 const closeUserMenu = () => (isUserMenuOpen.value = false)
-
 const handleClickOutside = (e) => {
     if (userMenuRef.value && !userMenuRef.value.contains(e.target)) {
         isUserMenuOpen.value = false
     }
 }
-onMounted(() => document.addEventListener('mousedown', handleClickOutside))
+window.addEventListener('cartUpdated', () => {
+    axios.get(`/cart/get`).then(response => { cartArticles.value = response.data.cart })
+});
+onMounted(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    axios.get(`/cart/get`).then(response => { cartArticles.value = response.data.cart })
+})
+
+const handleLogOut = () => {
+    axios.post("/logout")
+    isUserMenuOpen.value = !isUserMenuOpen.value
+}
+const getMe = async () => {
+    const data = await axios.get("/me").then(response => response.data);
+    return data
+}
 onBeforeUnmount(() => document.removeEventListener('mousedown', handleClickOutside))
 </script>

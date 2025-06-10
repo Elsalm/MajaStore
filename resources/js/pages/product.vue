@@ -16,6 +16,10 @@ function incrementQuantity() {
 function decrementQuantity() {
     if (quantity.value > 1) quantity.value--
 }
+const setItemCart = () => {
+    axios.post("/cart", { id: props.product.id, quantity: quantity.value, price: props.product.price });
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
+}
 </script>
 
 <template>
@@ -85,7 +89,7 @@ function decrementQuantity() {
                     </div>
 
                     <!-- Botón compra -->
-                    <button class="btn btn-primary">Agregar al carrito</button>
+                    <button class="btn btn-primary" @click="setItemCart">Agregar al carrito</button>
                 </div>
             </div>
         </div>

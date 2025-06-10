@@ -65,13 +65,10 @@ const formData = reactive({
     remember: false,
 })
 
-const handleLogOut = () => {
-    axios.post("/logout").then(response => console.log(response.data));
-}
 
 
 
 const handleSubmit = () => {
-    axios.post("/login", formData).then(response => console.log(response.data));
+    axios.post("/login", formData).then(() => { location.href = "/" });
 }
 </script>

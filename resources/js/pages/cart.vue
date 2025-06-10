@@ -20,7 +20,7 @@
                                 </div>
                                 <div class="flex-grow">
                                     <h3 class="font-medium">{{ item.name }}</h3>
-                                    <p class="text-primary font-semibold mt-1">${{ item.price.toFixed(2) }}</p>
+                                    <p class="text-primary font-semibold mt-1">${{ Number(item.price).toFixed(2) }}</p>
                                     <div class="flex flex-wrap items-center justify-between mt-4">
                                         <div class="flex items-center border rounded-md">
                                             <button class="px-3 py-1 text-gray-500 hover:text-gray-700"
@@ -86,7 +86,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-primary w-full mb-4">Comprar</button>
+                        <button class="btn btn-primary w-full mb-4" @click="storeOrder">Comprar</button>
                         <!--
                         <div class="text-sm text-gray-500 text-center">
                             <p>We accept:</p>
@@ -106,7 +106,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import axios from "axios"
 import {
     TrashIcon,
     MinusIcon,
@@ -119,23 +120,43 @@ const cartItems = ref([]) // tú controlas esta data externamente
 const subtotal = computed(() =>
     cartItems.value.reduce((sum, item) => sum + item.price * item.quantity, 0),
 )
-const shipping = 0
+const shipping = 10
 const tax = computed(() => subtotal.value * 0.08)
 const total = computed(() => subtotal.value + shipping + tax.value)
-
+const updateItem = (id, item) => {
+    axios.put(`/cart/${id}`, item)
+}
 function increaseQuantity(id) {
     const item = cartItems.value.find((i) => i.id === id)
-    if (item) item.quantity++
+    if (item) {
+        item.quantity++
+        updateItem(id, item);
+    }
 }
 function decreaseQuantity(id) {
     const item = cartItems.value.find((i) => i.id === id)
-    if (item && item.quantity > 1) item.quantity--
+    if (item && item.quantity > 1) {
+        item.quantity--
+        updateItem(id, item);
+    }
+
 }
 function removeItem(id) {
-    cartItems.value = cartItems.value.filter((i) => i.id !== id)
+    axios.delete(`/cart/${id}`).then(response => cartItems.value = response.data.cart);
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
 }
 function goToProducts() {
     location.href = "/product"
+}
+const getCartItems = () => {
+    axios.get("/cart/get").then(response => { cartItems.value = response.data.cart });
+}
+
+onMounted(() => {
+    getCartItems();
+});
+const storeOrder = () => {
+    axios.post("/order").then(res => { location.href = res.data.url });
 }
 </script>
 
