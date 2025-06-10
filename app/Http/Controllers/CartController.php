@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -11,25 +12,34 @@ class CartController extends Controller
         return view('cart.index');
     }
 
-    public function get(Request $request)
+    public function show(Request $request)
     {
         $cart = $request->session()->get('cart', []);
+        $model = [];
+        foreach ($cart as $c) {
+            $product = Product::find($c['id']);
+            $model[] = [
+                'name' => $product->name,
+                'id' => $product->id,
+                'price' => $product->price,
+                'quantity' => $c['quantity'],
+                'image' => $product->getFirstMediaUrl('product')];
 
-        return response()->json($cart);
+        }
+
+        return response()->json(['cart' => $model]);
     }
 
     public function store(Request $request)
     {
+
         $data = $request->validate([
-            'id' => 'required|string',
-            'name' => 'required|string',
-            'price' => 'required|numeric',
+            'id' => 'required|integer',
             'quantity' => 'required|integer|min:1',
-            'image' => 'nullable|string',
+            'price' => 'required|numeric|min:1',
         ]);
 
         $cart = $request->session()->get('cart', []);
-
         if (isset($cart[$data['id']])) {
             $cart[$data['id']]['quantity'] += $data['quantity'];
         } else {
@@ -59,7 +69,7 @@ class CartController extends Controller
         return response()->json(['message' => 'Item not found'], 404);
     }
 
-    public function remove(Request $request, $id)
+    public function destroy(Request $request, $id)
     {
         $cart = $request->session()->get('cart', []);
 
