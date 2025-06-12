@@ -25,7 +25,7 @@
                     </li>
                 </ul>
 
-                <button class="btn-primary p-4 rounded-lg">Ver Nuestros productos</button>
+                <a href="/product" class="btn-primary btn text-center rounded-lg">Ver Nuestros productos</a>
             </div>
             <div class="w-full h-100 md:w-1/2 object-contain flex gap-4 justify-center group *:rounded-lg">
                 <img src="@img/sala_moderna.png" alt=""

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Material;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProductsController extends Controller
 {
@@ -48,25 +51,32 @@ class ProductsController extends Controller
             'quantity' => 'required|integer|min:1',
             'price' => 'required|numeric|min:1',
             'categories' => 'required|array|min:1|max:4',
-            'categories.*' => 'integer',
-            'images' => 'required|array|min:1|max:10',
-            'images.*' => 'image|between:10,157286400',
+            'categories.*' => 'string',
+            'images' => 'required|array|min:1|max:5',
+            'images.*' => 'image',
             'colors' => 'required|array|min:1|max:5',
             'colors.*' => 'integer',
             'materials' => 'required|array|min:1|max:5',
-            'materials.*' => 'integer',
+            'materials.*' => 'string',
         ]);
 
         $product = Product::create(
             ['user_id' => 1, ...$request->except(['images', 'categories'])]
         );
 
-        $product->categories()->attach($request->input('categories'));
+        $categories = Category::whereIn('name', $request->input('categories'))->pluck('id')->toArray();
+
+        $materials = Material::whereIn('name', $request->input('categories'))->pluck('id')->toArray();
+
+        $product->categories()->attach($categories);
         $product->colors()->attach($request->input('colors'));
-        $product->materials()->attach($request->input('materials'));
+        $product->materials()->attach($materials);
 
         foreach ($request->file('images') as $image) {
-            $product->addMedia($image)->toMediaCollection('product');
+            $name = Str::uuid().'.'.$image->getClientOriginalExtension();
+            $product->addMedia($image)
+                ->usingFileName($name)
+                ->toMediaCollection('product');
         }
 
         $media = $product->getMedia('product')->map(function ($media) {
@@ -138,26 +148,49 @@ class ProductsController extends Controller
         if (! empty($materials)) {
             $query->whereHas('materials', fn ($q) => $q->whereIn('materials.id', $materials));
         }
-        if ($query->count() === 0) {
-            return response()->json(['success' => true, 'products' => 'no se han encontrado productos'], 404);
-        }
 
         $results = $query->paginate(10);
 
-        $results->setCollection(
-            $results->getCollection()->map(function ($product) {
-                return [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'price' => $product->price,
-                    'color' => $product->color,
-                    'material' => $product->material,
-                    'image_url' => $product->getFirstMediaUrl('product'),
-                    'categories' => $product->categories->pluck('name'),
-                ];
-            })
-        );
+        if ($results->isEmpty()) {
+            return response()->json(['success' => true, 'products' => [], 'pagination' => null], 404);
+        }
 
-        return response()->json(['success' => true, 'products' => $results]);
+        $products = $results->getCollection()->map(fn ($product) => [
+            'id' => $product->id,
+            'name' => $product->name,
+            'price' => $product->price,
+            'color' => $product->color,
+            'material' => $product->material,
+            'image_url' => $product->getFirstMediaUrl('product'),
+            'categories' => $product->categories->pluck('name'),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'products' => $products,
+            'pagination' => [
+                'current_page' => $results->currentPage(),
+                'last_page' => $results->lastPage(),
+                'per_page' => $results->perPage(),
+                'total' => $results->total(),
+            ],
+        ]);
+    }
+
+    public function getProductsByName(Request $request)
+    {
+        $search = strtolower($request->input('search'));
+        $products = Product::whereLike('name', '%'.$search.'%')->limit(6)->get();
+        $results = [];
+        foreach ($products as $model) {
+            $results[] = [
+                'id' => $model['id'],
+                'name' => $model['name'],
+                'price' => $model['price'],
+                'img' => $model->getFirstMediaUrl('product'),
+            ];
+        }
+
+        return response()->json(['success' => true, 'results' => $results]);
     }
 }

@@ -2,7 +2,7 @@
     <div class="container bg-primary-lighter py-10 flex flex-col gap-4">
         <div class="flex flex-row items-center justify-between ">
             <h3 class="text-2xl font-bold! flex pr-4 ">Productos Destacados</h3>
-            <a href="" class="text-lg! flex flex-row items-center text-primary">Ver Todo
+            <a href="/product" class="text-lg! flex flex-row items-center text-primary">Ver Todo
                 <ArrowIcon class="size-5" />
             </a>
         </div>
@@ -24,7 +24,6 @@ const productsData = ref([]);
 const getFeaturedProducts = async () => {
     const data = await axios.get("/featured/products").then(response => response.data)
     productsData.value.push(...data.products);
-    console.log(productsData.value);
 }
 onMounted(() => {
     getFeaturedProducts();

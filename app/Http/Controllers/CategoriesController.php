@@ -12,4 +12,15 @@ class CategoriesController extends Controller
 
         return response()->json(['succes' => true, 'category' => $category]);
     }
+
+    public function getIdByName($name)
+    {
+
+        $category = Category::whereLike('name', '%'.$name.'%', caseSensitive: false)->get();
+
+        $category = $category->first()->id;
+
+        return view('products.filter', compact('category'));
+
+    }
 }
