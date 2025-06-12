@@ -15,15 +15,17 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->integer('amount')->nullable();
-            $table->integer('status')->nullable();
+            $table->integer('status')->default(0)->nullable();
             $table->text('stripe_id')->nullable();
             $table->timestamps();
         });
 
-        Schema::create('order_products', function (Blueprint $table) {
+        schema::create('order_products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained('orders')->nullable()->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products')->nullable()->onDelete('cascade');
+            $table->integer('quantity')->nullable();
+            $table->decimal('price', 8, 2)->nullable();
             $table->integer('total')->nullable();
             $table->timestamps();
         });

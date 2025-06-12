@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./resources/js/*"],
+      "@/components/*": ["./resources/js/components/*"],
+      "@/lib/*": ["./resources/js/lib/*"] // For shadcn-vue utilities
+    }
+  },
+  "exclude": ["node_modules", "**/node_modules"]
+}

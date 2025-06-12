@@ -1,0 +1,34 @@
+<template>
+    <a-config-provider :theme="{
+        token: {
+            colorPrimary: '#2D5F5D',
+
+        },
+    }">
+    </a-config-provider>
+    <a-space direction="vertical" style="width: 100%" class="shadow-md focus:outline-none!">
+        <a-select v-model:value="value" mode="multiple" style="width: 100%" :placeholder="props.placeholder"
+            option-label-prop="children" size="large" class="focus:outline-none!">
+            <a-select-option v-for="option in props.options" :value="option.id" :label="option.name" :key="option.id">
+                {{ option.name }}
+            </a-select-option>
+        </a-select>
+    </a-space>
+</template>
+
+<script lang="ts" setup>
+import { ref, watch, defineEmits } from 'vue';
+import { theme } from 'ant-design-vue';
+const emit = defineEmits(["update:categories"])
+const value = ref([]);
+const props = defineProps({
+    options: Array,
+    placeholder: String,
+});
+
+
+watch(value, val => {
+    console.log(val);
+    emit("update:model", val);
+});
+</script>

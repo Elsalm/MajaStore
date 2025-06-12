@@ -8,10 +8,10 @@
                 tu casa en
                 algo
                 extraordinario</p>
-            <button class="btn-primary p-4 rounded-lg text-neutro-50">Catalogo</button>
-            <button class="btn-secondary p-4 rounded-lg">Ver mas</button>
+            <a href="/product/" class="btn btn-primary text-center rounded-lg text-neutro-50">Catalogo</a>
+            <a href="/product/" class="btn btn-secondary  text-center rounded-lg">Ver mas</a>
         </div>
-        <div class="self-center md:w-2/5">
+        <div class="self-center md:w-2/5 pt-6">
             <img src="@img/Sala_intro.png" alt="" class="rounded-lg">
         </div>
     </div>

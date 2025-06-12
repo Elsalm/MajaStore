@@ -2,6 +2,5 @@
     <x-slot:title>
         Muebles
     </x-slot>
-    <products-body>
-    </products-body>
+    <products-body :filtro-id="@json($category ?? null)"></products-body>
 </x-layout>

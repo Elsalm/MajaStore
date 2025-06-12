@@ -12,7 +12,8 @@
                     </a>
                 </p>
             </div>
-            <form class="mt-8 space-y-6" @submit.prevent="handleSubmit">
+            <p v-if="showError != ''" class="text-red-500 text-center">{{ showError }}</p>
+            <form class=" mt-8 space-y-6" @submit.prevent="handleSubmit">
                 <div class="space-y-4">
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">
@@ -57,7 +58,7 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import axiost from 'axios'
 const formData = reactive({
     email: '',
@@ -65,10 +66,16 @@ const formData = reactive({
     remember: false,
 })
 
-
+const showError = ref("")
 
 
 const handleSubmit = () => {
-    axios.post("/login", formData).then(() => { location.href = "/" });
+    if (formData.email == "" || formData.password == "") {
+        showError.value = "Algun campo desta vacio"
+    }
+    else {
+        axios.post("/login", formData).then(() => { location.href = "/" }).catch(error => { showError.value = error.response.data.message });
+    }
+
 }
 </script>
