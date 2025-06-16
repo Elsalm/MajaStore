@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col lg:flex-row gap-8">
-        <div class="hidden lg:block w-80">
+        <div class="lg:block w-80">
             <div class="bg-white rounded-lg flex flex-col shadow-sm p-6 sticky top-24">
                 <nav>
                     <ul>

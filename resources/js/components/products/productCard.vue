@@ -1,5 +1,5 @@
 <template>
-    <div class="product-card group bg-white rounded-lg overflow-hidden border border-gray-100">
+    <div class="product-card group bg-white rounded-lg overflow-hidden border border-gray-100 ">
         <div class="relative">
             <a :href="`/product/${id}`" class="block overflow-hidden">
                 <img :src="props.image" :alt="props.name"
