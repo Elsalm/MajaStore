@@ -1,22 +1,22 @@
 <template>
-    <div class="container flex  gap-2 min-h-[70vh] mt-4">
+    <div class="container flex flex-col sm:flex-row gap-2 min-h-[70vh] mt-4">
         <SidebarPanel v-model="step" />
-        <div class="w-3/4">
-            <div v-if="step == 0">
+        <div class="w-full sm:w-3/4">
+            <div v-if="step == 0" class="mb-4">
                 <verCompras></verCompras>
             </div>
-            <div v-if="step == 1">
+            <div v-if="step == 1" class="mb-4">
                 <IssuesForm></IssuesForm>
             </div>
-            <div v-if="step == 2">
+            <div v-if="step == 2" class="mb-4">
                 <SeeIssues></SeeIssues>
             </div>
 
-            <div v-if="step == 3">
+            <div v-if="step == 3" class="mb-4">
                 <Returns></Returns>
             </div>
 
-            <div v-if="step == 4">
+            <div v-if="step == 4" class="mb-4">
                 <SeeAllOrders></SeeAllOrders>
             </div>
         </div>

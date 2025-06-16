@@ -1,5 +1,5 @@
 <template>
-    <header class="bg-white shadow-sm container py-4">
+    <header class="bg-white container py-4">
         <div class="flex flex-wrap items-center justify-between">
             <a href="/">
                 <h2 class="text-2xl font-bold text-primary sm:order-1">MajaStore</h2>
@@ -68,6 +68,11 @@
                                 <MonitorCog class="mr-2 size-4" />
                                 Panel
                             </a>
+                            <a href="/product/create"
+                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <MonitorCog class="mr-2 size-4" />
+                                Crear producto
+                            </a>
                             <button class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                 @click="handleLogOut">
                                 <UserMinus class="mr-2 size-4" />
@@ -89,12 +94,6 @@
             <a v-for="option in options" :key="option.categories" :href="option.dir"
                 class="text-gray-600 hover:text-primary transition-colors py-2" @click="closeMenu">
                 {{ option.categories }}
-            </a>
-
-            <a href="/login" v-if="me" class="text-gray-600 hover:text-primary transition-colors py-2 flex items-center"
-                @click="closeMenu">
-                <User class="mr-2 size-5" />
-                Mi cuenta
             </a>
             <div>
                 <template v-if="me">

@@ -11,7 +11,7 @@
                             <ul>
                                 <li v-for="prod in order.products" :key="prod.order_product_id">
                                     {{ prod.product_name }} ×{{ prod.quantity }} @ {{ prod.price }}€ = {{
-                                    lineTotal(prod) }}€
+                                        lineTotal(prod) }}€
                                 </li>
                             </ul>
                         </template>
@@ -26,7 +26,7 @@
 import { defineProps } from 'vue';
 
 const props = defineProps<{
-    data: Array<any>
+    data: <any>
 }>();
 
 const initLoading = false;

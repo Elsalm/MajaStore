@@ -11,7 +11,7 @@ const form = reactive({
     images: [],
     categories: [],
     materials: [],
-    colors: [],
+    colors: [1],
 })
 
 const formData = reactive({
@@ -27,7 +27,7 @@ const resetForm = () => {
     form.images = []
     form.categories = []
     form.materials = []
-    form.colors = []
+    form.colors = [1]
 }
 
 
@@ -92,16 +92,6 @@ onMounted(async () => {
 
                     </div>
 
-                    <div class=" flex gap-2">
-                        Colores disponibles:
-                        <label v-for="colors in formData.colors" :for="colors.name" class="block">
-                            <input type="checkbox" :value="colors.id" :id="colors.name" v-model="form.colors"
-                                class="peer hidden">
-                            <div :class="[`size-6 rounded-xl border border-gray-400 peer-checked:border-black`]"
-                                :style="{ backgroundColor: colors.hexa }">
-                            </div>
-                        </label>
-                    </div>
                     <div>
                         <label for="quantity" class="block text-sm font-medium text-gray-700">
                             Cantidad Disponible:
